@@ -34,6 +34,8 @@ import '../styles/global.css';
                 <option value="PEREIRA-EEPD">PEREIRA-EEPD</option>
                 <option value="EMCALI">EMCALI</option>
                 <option value="CETSA">CETSA</option>
+                <option value="CEDENAR">CEDENAR (Nariño)</option>
+                <option value="PUTUMAYO">PUTUMAYO</option>
               </select>
             </div>
             <h1 id="titulo-mapa" class="text-3xl lg:text-4xl font-extrabold bg-gradient-to-r from-white via-emerald-200 to-cyan-200 bg-clip-text text-transparent">
@@ -218,10 +220,10 @@ import '../styles/global.css';
 
     async function initMap() {
       map = L.map('map', {
-        center: [4.6, -76.0],
-        zoom: 9,
+        center: [4.0, -72.5],
+        zoom: 6,
         zoomControl: true,
-        minZoom: 7,
+        minZoom: 5,
         maxZoom: 12
       });
 
@@ -567,7 +569,12 @@ import '../styles/global.css';
       
       const usuariosRes = await fetch('/usuarios.json');
       const todosUsuarios = await usuariosRes.json();
-      usuariosData = todosUsuarios.filter(u => u.empresa === empresa);
+      
+      if (empresa === 'PUTUMAYO') {
+        usuariosData = todosUsuarios.filter(u => u.departamento === 'PUTUMAYO');
+      } else {
+        usuariosData = todosUsuarios.filter(u => u.empresa === empresa);
+      }
       
       if (geoJsonLayer) {
         geoJsonLayer.clearLayers();
@@ -734,7 +741,15 @@ import '../styles/global.css';
         listaDiv.appendChild(div);
       });
       
-      map.setView([4.5, -72.5], 6);
+      if (empresa === 'CEDENAR') {
+        map.setView([1.5, -77.5], 6);
+      } else if (empresa === 'PUTUMAYO') {
+        map.setView([0.8, -76.5], 8);
+      } else if (empresa === 'EMCALI' || empresa === 'CETSA') {
+        map.setView([3.8, -76.5], 9);
+      } else {
+        map.setView([4.5, -76.0], 9);
+      }
     };
 
     initMap();
