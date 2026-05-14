@@ -236,8 +236,9 @@ import '../styles/global.css';
       const empresaSelect = document.getElementById('select-empresa');
       empresaActual = empresaSelect.value;
       
-      const usuariosRes = await fetch('/api/usuarios.json?empresa=' + empresaActual);
-      usuariosData = await usuariosRes.json();
+      const usuariosRes = await fetch('/usuarios.json');
+      const todosUsuarios = await usuariosRes.json();
+      usuariosData = todosUsuarios.filter(u => u.empresa === empresaActual);
 
       let totalUsuarios = 0;
       let sumaDiu = 0;
@@ -564,8 +565,9 @@ import '../styles/global.css';
     window.cambiarEmpresa = async function(empresa) {
       empresaActual = empresa;
       
-      const usuariosRes = await fetch('/api/usuarios.json?empresa=' + empresa);
-      usuariosData = await usuariosRes.json();
+      const usuariosRes = await fetch('/usuarios.json');
+      const todosUsuarios = await usuariosRes.json();
+      usuariosData = todosUsuarios.filter(u => u.empresa === empresa);
       
       if (geoJsonLayer) {
         geoJsonLayer.clearLayers();
